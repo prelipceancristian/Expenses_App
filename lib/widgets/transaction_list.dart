@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
-import 'package:intl/intl.dart';
+
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> _userTransactions;
@@ -10,6 +11,7 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        print('build() TransactionList');
     return _userTransactions.isEmpty
         ? LayoutBuilder(
             builder: (context, constraints) {
@@ -30,35 +32,11 @@ class TransactionList extends StatelessWidget {
           )
         : ListView.builder(
             itemBuilder: (ctx, index) {
-              return Card(
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                elevation: 5,
-                child: ListTile(
-                  leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: FittedBox(
-                            child:
-                                Text('\$${_userTransactions[index].amount}')),
-                      )),
-                  title: Text(
-                    _userTransactions[index].title,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  subtitle: Text(DateFormat('yMMMd')
-                      .format(_userTransactions[index].date)),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Theme.of(context).errorColor,
-                    onPressed: () {
-                      _deleteTransaction(_userTransactions[index].id);
-                    },
-                  ),
-                ),
-              );
+              return TransactionItem(transaction: _userTransactions[index], deleteTransaction: _deleteTransaction);
             },
             itemCount: _userTransactions.length,
           );
   }
 }
+
+
